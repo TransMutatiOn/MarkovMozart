@@ -1,0 +1,32 @@
+"MTrk"
+length
+events
+	delta-time
+	event
+		MIDI channel event
+			128-143 = note off
+			144-159 = note on
+		Sysex event
+			240 247
+		Meta-event
+			
+			255 81 3 (7 161 32) = set tempo (120 BPM)
+			255 88 4 (4 2 24 8) = set time signature( 4/4, clocks/metronome click, # of 32nd notes per quarter note)
+			255 47 0 = end of track, needed at end of each MTrk
+
+
+
+
+
+
+
+
+beginning of note
+	add to end of vector
+	save note and time pressed to map
+end of note
+	find length based off of time saved in map
+	search backwards through vector of notes and find index
+	insert length into time vector at that index
+
+26+128*3
