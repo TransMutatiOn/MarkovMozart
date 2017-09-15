@@ -1,7 +1,5 @@
 ﻿#include "conversion.h"
 
-string path = "D:\\Documents\\Visual Studio 2017\\Projects\\Markov Mozart\\Markov Mozart";
-
 int decodeVLQ(const vector<byte>& input) {
 	int ret = 0;
 	for (int i = input.size() - 1, j = 0; i >= 0; i--, j++) {
@@ -38,9 +36,9 @@ string generateName(MTRand_int32& rng) {
 	// generates a random song name of the format "<adjective>_<noun>_in_<key signature>"
 	vector<string> adj, noun, key;
 	// open files
-	ifstream f_adj(path + "\\text\\adjective.txt");
-	ifstream f_noun(path + "\\text\\noun.txt");
-	ifstream f_key(path + "\\text\\key.txt");
+	ifstream f_adj("text/adjective.txt");
+	ifstream f_noun("text/noun.txt");
+	ifstream f_key("text/key.txt");
 	// read inpput
 	string input;
 	while (f_adj >> input) { adj.push_back(input); }
@@ -84,12 +82,12 @@ Converter::Converter() {
 
 		readableNotes[to_string(octave) + char(note + 33)] = n + to_string(octave);
 	}
-	
+
 }
 PianoRoll Converter::ConvertToText(const string& midifile) {
 	// open midi file in binary mode
 	ifstream midi;
-	midi.open(path + "\\input\\" + midifile, ios::binary);
+	midi.open("input/" + midifile, ios::binary);
 	if (!midi)
 		return PianoRoll();
 	// read byte-by-byte and save to vector
@@ -103,7 +101,7 @@ PianoRoll Converter::ConvertToText(const string& midifile) {
 	delete buff;
 	cout << "    MIDI file \"" << midifile << "\" found... ";
 	// determine file format, number of tracks and note timing
-	vector<byte>::iterator 
+	vector<byte>::iterator
 		iter1 = data.begin() + 8,
 		iter2 = data.begin() + 10,
 		iter3 = data.begin() + 12,
@@ -147,7 +145,7 @@ string Converter::ConvertToMidi(const PianoRoll& data) {
 	// find first free filename
 	for (int i = 0; i < 1024; i++) {
 		name = generateName(rng);
-		ifstream test(path + "\\output\\" + name);
+		ifstream test("output/" + name);
 		if (i == 1023) {
 			cout << "    NO FREE FILENAMES FOUND." << endl;
 			return "";
@@ -158,7 +156,7 @@ string Converter::ConvertToMidi(const PianoRoll& data) {
 		}
 		test.close();
 	}
-	output.open(path + "\\output\\" + name);
+	output.open("output/" + name);
 	// write pretty notes to file
 	for (int i = 0; i < data.getNotes().size(); i++) {
 		output << readableNotes.find(data.getNotes()[i])->second;
