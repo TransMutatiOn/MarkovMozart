@@ -36,9 +36,9 @@ string generateName(MTRand_int32& rng) {
 	// generates a random song name of the format "<adjective>_<noun>_in_<key signature>"
 	vector<string> adj, noun, key;
 	// open files
-	ifstream f_adj("text/adjective.txt");
-	ifstream f_noun("text/noun.txt");
-	ifstream f_key("text/key.txt");
+	ifstream f_adj("../text/adjective.txt");
+	ifstream f_noun("../text/noun.txt");
+	ifstream f_key("../text/key.txt");
 	// read inpput
 	string input;
 	while (f_adj >> input) { adj.push_back(input); }
@@ -87,7 +87,7 @@ Converter::Converter() {
 PianoRoll Converter::ConvertToText(const string& midifile) {
 	// open midi file in binary mode
 	ifstream midi;
-	midi.open("input/" + midifile, ios::binary);
+	midi.open("../input/" + midifile, ios::binary);
 	if (!midi)
 		return PianoRoll();
 	// read byte-by-byte and save to vector
@@ -145,7 +145,7 @@ string Converter::ConvertToMidi(const PianoRoll& data) {
 	// find first free filename
 	for (int i = 0; i < 1024; i++) {
 		name = generateName(rng);
-		ifstream test("output/" + name);
+		ifstream test("../output/" + name);
 		if (i == 1023) {
 			cout << "    NO FREE FILENAMES FOUND." << endl;
 			return "";
@@ -156,7 +156,7 @@ string Converter::ConvertToMidi(const PianoRoll& data) {
 		}
 		test.close();
 	}
-	output.open("output/" + name);
+	output.open("../output/" + name);
 	// write pretty notes to file
 	for (int i = 0; i < data.getNotes().size(); i++) {
 		output << readableNotes.find(data.getNotes()[i])->second;
